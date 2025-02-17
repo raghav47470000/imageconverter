@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IMAGE CONVERTER - Convert your images online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Gradient Background */
+        body {
+            background: linear-gradient(135deg, #2196F3, #E91E63);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Navbar Fixed at the Top */
+        .navbar {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+
+        /* Moving Text Animation */
+        .moving-text-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 0;
+            position: fixed;
+            top: 56px; /* Below navbar */
+            z-index: 999;
+            backdrop-filter: blur(5px);
+            text-align: center;
+        }
+
+        .moving-text {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            animation: moveText 10s linear infinite;
+        }
+
+        @keyframes moveText {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Flash Messages Section */
+        .flash-container {
+            width: 100%;
+            margin-top: 100px; /* Space below moving text */
+            display: flex;
+            justify-content: center;
+        }
+
+        /* White Container (NOT Transparent) */
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background: white; /* Solid White */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 40px; /* Space after flash messages */
+        }
+
+        .card {
+            background: transparent;
+            border: none;
+        }
+
+        .btn-success {
+            background: #43a047;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: #388e3c;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">IMAGE CONVERTER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/how-to-use">How to use</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
+                </ul>
+                <div class="d-flex">
+                    {% if logged_in %}
+                        <a href="/logout" class="btn btn-outline-light mx-1">Logout</a>
+                    {% else %}
+                        <a href="/login" class="btn btn-outline-light mx-1">Login</a>
+                        <a href="/signup" class="btn btn-outline-light mx-1">Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Moving Text -->
+    <div class="moving-text-container">
+        <span class="moving-text">🚀 IMAGE CONVERTER - Convert your images online | Fast & Free | 🚀 IMAGE CONVERTER - Convert your images online | Fast & Free |</span>
+    </div>
+
+    <!-- Flash Messages -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <strong>Message:</strong> {{ message | safe }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="card">
+            <h1 class="fs-4 text-center">IMAGE CONVERTER - Convert your images online</h1>
+            <form action="/edit" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Select an Image to convert</label>
+                    <input class="form-control" type="file" name="file" id="formFile" required>
+                </div>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <select name="operation" class="form-select" id="floatingSelect" required>
+                            <option value="" disabled selected>Choose an Operation</option>
+                            <option value="cpng">Convert to PNG</option>
+                            <option value="cgray">Convert to Grayscale</option>
+                            <option value="cwebp">Convert to WebP</option>
+                            <option value="cjpg">Convert to JPG</option>
+                            <option value="cjpeg">Convert to JPEG</option>
+                        </select>
+                        <label for="floatingSelect">Select a Converting Operation</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
